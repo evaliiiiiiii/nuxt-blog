@@ -1,0 +1,33 @@
+{
+  "posts": [
+    {
+      "title": "test",
+      "content": "test",
+      "img_url": "https://i.imgur.com/kngfqSB.jpg",
+      "category_id": 1,
+      "id": 2
+    },
+    {
+      "title": "11111",
+      "content": "1111",
+      "img_url": "https://i.imgur.com/kngfqSB.jpg",
+      "category_id": 1,
+      "id": 3
+    },
+    {
+      "title": "2222",
+      "content": "222",
+      "img_url": "https://i.imgur.com/kngfqSB.jpg",
+      "category_id": 2,
+      "id": 4
+    },
+    {
+      "title": "4444",
+      "content": "4444",
+      "img_url": "444",
+      "category_id": 1,
+      "id": 5
+    }
+  ],
+  "categories": []
+}
