@@ -14,7 +14,7 @@
       <v-text-field filled label="img_url" v-model="form.img_url"></v-text-field>
 
       <v-select
-        v-model="form.category_id"
+        v-model="form.categoryId"
         :items="categories"
         label="Standard"
       ></v-select>
@@ -44,26 +44,22 @@
 <script>
   export default {
     data: () => ({
-      categories: [
-      {
-          text: '分類1',
-          value: 1,
-      },
-      {
-          text: '分類2',
-          value: 2,
-      },
-      {
-          text: '分類3',
-          value: 3,
-      }],
+      // categories: [],
       form: {
         title: '',
         content: '',
         img_url: '',
-        category_id: null
+        categoryId: null
       }
     }),
+    async asyncData({ $axios }) {
+
+      const data = await $axios.$get('http://localhost:3004/categories')
+
+      return {
+        categories: data
+      }
+    },
     methods: {
       async submit() {
 

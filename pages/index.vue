@@ -1,9 +1,19 @@
 <template>
   <div>
     <v-container>
+      <ul>
+        <li v-for="category in categories" :key="category.value">
+          <nuxt-link :to="`/?category=${category.value}`">{{ category.text }}</nuxt-link>
+        </li>
+      </ul>
     <nuxt-link to="/NewArticle">
       <v-btn>
         新增文章
+      </v-btn>
+    </nuxt-link>
+     <nuxt-link to="/NewArticle">
+      <v-btn>
+        新增分類
       </v-btn>
     </nuxt-link>
     <v-row>
@@ -43,13 +53,13 @@
               <v-btn depressed small
               class="grey--text"
               color="grey lighten-3"
-              to="/EditArticle">
+              :to="`/EditArticle/${post.id}`">
               編輯
               </v-btn>
               <v-btn depressed small
               class="grey--text"
               color="grey lighten-3"
-              @click="deletePost"
+              @click="deletePost(post.id)"
               >刪除
 
               </v-btn>
@@ -64,39 +74,50 @@
 
 
 <script>
-import Logo from '~/components/Logo.vue'
-import VuetifyLogo from '~/components/VuetifyLogo.vue'
 
 export default {
-  components: {
-    Logo,
-    VuetifyLogo
-  },
-
   async asyncData({ $axios }) {
 
     const data = await $axios.$get('http://localhost:3004/posts')
+    const categories = await $axios.$get('http://localhost:3004/categories')
+
+    categories.push({ value: 'all', text: '所有文章'})
 
     return {
-      posts: data
+      posts: data,
+      categories
+    }
+  },
+  watch: {
+    async $route(val) {
+      const category = val.query.category
+      let data = []
+      if (category === 'all') {
+        data = await this.$axios.$get('http://localhost:3004/posts')
+      } else {
+        data = await this.$axios.$get(`http://localhost:3004/categories/${category}/posts`)
+      }
+      this.posts = data
     }
   },
 
   methods:{
-    async deletePost({id}) {
-    const ddd = await $axios.$delete(`http://localhost:3004/posts/${id}`,{data: { post }})
+
+    async deletePost(id) {
+      console.log(id)
+
+      try{
+        await this.$axios.$delete(`http://localhost:3004/posts/${id}`)
+        const data = await this.$axios.$get('http://localhost:3004/posts')
+        console.log(data)
+        this.posts = data
+      } catch(e) {
+        console.log(e);
+      }
     },
   }
 
-
-  // methods: {
-  //   DeleteArticle () {
-  //          this.post.splice(this.post.id, 1)
-
-  // const index = this.posts.findIndex(item => item.id === post.id)
-  // this.posts.splice(index, 1)
-  //       }
-  // }
+//  const data = await $axios.$delete(`http://localhost:3004/posts/${id}`)
 
 
 

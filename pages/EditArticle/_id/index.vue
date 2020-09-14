@@ -1,4 +1,6 @@
 <template>
+<div>
+
   <v-card>
     <v-toolbar
       flat
@@ -12,7 +14,7 @@
       <v-text-field filled label="Title" v-model="form.title"></v-text-field>
 
       <v-select
-        v-model="form.category_id"
+        v-model="form.categoryId"
         :items="categories"
         label="Standard"
       ></v-select>
@@ -37,6 +39,7 @@
       </v-btn>
     </v-card-actions>
   </v-card>
+  </div>
 </template>
 
 <script>
@@ -53,31 +56,32 @@
       },
       {
           text: '分類3',
-          value: 3,
+          value: 3
       }],
-      form: {
-        title: '',
-        content: '',
-        img_url: '',
-        category_id: null
-      }
+      // form: {
+      //   title: '',
+      //   content: '',
+      //   img_url: '',
+      //   categoryId: null
+      // }
     }),
 
 
-    async asyncData({ $axios }) {
+    async asyncData({ $axios, params }) {
 
-    const data = await $axios.$get(`http://localhost:3004/posts/${id}`)
+    const data = await $axios.$get(`http://localhost:3004/posts/${params.id}`)
+    // console.log($router.params.id)
 
     return {
-      posts: data
+        form: data
       }
     },
 
     methods: {
       async edit() {
-      await this.$axios.$patch(`http://localhost:3004/posts/${id}`, this.form)
+        await this.$axios.$patch(`http://localhost:3004/posts/${this.$route.params.id}`, this.form)
 
-      this.$router.push('/')
+        this.$router.push('/')
       },
     }
   }
